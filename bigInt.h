@@ -31,7 +31,6 @@ namespace xmath {
 		bool operator<(const bigInt &op) const;
 		bool operator>(const bigInt &op) const;
 
-
 	private:
 		bool sign; //true : pos, false : neg
 		void* number;

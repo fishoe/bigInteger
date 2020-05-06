@@ -1,6 +1,6 @@
 #include "bigInt.h"
 
-xstl::bigInt::bigInt()
+xmath::bigInt::bigInt()
 {
 	int * temp = new int[1];
 	*temp = 0;
@@ -10,14 +10,14 @@ xstl::bigInt::bigInt()
 	bytes = sizeof(int);
 }
 
-xstl::bigInt::~bigInt()
+xmath::bigInt::~bigInt()
 {
 	delete[] number;
 }
 
 
 
-bool xstl::bigInt::operator==(const bigInt& op) const
+bool xmath::bigInt::operator==(const bigInt& op) const
 {
 	if (chiper != op.chiper) return false;
 	if (sign != op.sign) return false;
@@ -31,7 +31,7 @@ bool xstl::bigInt::operator==(const bigInt& op) const
 	return true;
 }
 
-bool xstl::bigInt::operator<(const bigInt& op) const{
+bool xmath::bigInt::operator<(const bigInt& op) const{
 	if (sign != op.sign) return sign ? false : true;
 	if (chiper != op.chiper) return chiper < op.chiper ? true : false;
 
@@ -48,6 +48,6 @@ bool xstl::bigInt::operator<(const bigInt& op) const{
 	return false;
 }
 
-bool xstl::bigInt::operator>(const bigInt& op) const {
+bool xmath::bigInt::operator>(const bigInt& op) const {
 	return op < (*this);
 }
