@@ -13,11 +13,16 @@ namespace xmath {
 	{
 	public:
 		bigInt();
+		bigInt(const unsigned int n);
 		~bigInt();
 		
 		unsigned int getChipers() { return chiper; }
 		//toString
 		string toStr();
+		//toInt
+		int toInt();
+		//toll
+		long long toll();
 		//acc
 		bigInt& operator+(bigInt &op);
 		//min
