@@ -90,7 +90,7 @@ xmath::bigInt& xmath::bigInt::operator-(bigInt& op)
 		if (op == *this) return *result;
 		
 		unsigned int nBytes = ((bytes > op.bytes) ? bytes : op.bytes) / sizeof(int);
-		result->number = new unsigned int[nInt + 1];
+		result->number = new unsigned int[nBytes + 1];
 		unsigned int carry = 0;
 
 		if ((sign == true)&&(*this > op.sign)|| (sign == false) && (*this < op.sign)) {
