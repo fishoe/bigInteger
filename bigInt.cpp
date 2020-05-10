@@ -56,14 +56,82 @@ xmath::bigInt& xmath::bigInt::operator+(bigInt& op)
 
 			unsigned long long temp = lval + rval + carry;
 
-			unsigned int* ojb = ((unsigned int*)result->number)+ i;
-			*ojb = *((unsigned int*)&temp);
+			unsigned int* p = ((unsigned int*)result->number)+ i;
+			*p = *((unsigned int*)&temp);
 			carry = *((unsigned int*)&temp + 1);
 		}
 		if (carry != 0) { //캐리값 저장
 			auto n = result->bytes / sizeof(int);
 			unsigned int* t = ((unsigned int*)(result->number)) + n - 1;
 			*t = carry;
+		}
+	}
+	else {//다른 부호끼리 합 case -1 + +2 2 + -2
+		if (sign) {
+			bigInt rBigInt(op);
+			rBigInt.sign = !op.sign;
+			return *this - rBigInt;
+		}
+		else {
+			bigInt rBigInt(*this);
+			rBigInt.sign = !sign;
+			return op - *this;
+		}
+	}
+
+	return *result;
+}
+
+xmath::bigInt& xmath::bigInt::operator-(bigInt& op)
+{
+	bigInt* result = new bigInt;
+
+	if (sign == op.sign) {
+		if (op == *this) return *result;
+		
+		unsigned int nBytes = ((bytes > op.bytes) ? bytes : op.bytes) / sizeof(int);
+		result->number = new unsigned int[nInt + 1];
+		unsigned int carry = 0;
+
+		if ((sign == true)&&(*this > op.sign)|| (sign == false) && (*this < op.sign)) {
+			for (int i = 0; i < nBytes; i++) {
+				unsigned long long lval = (i * nBytes) < bytes ? *((unsigned int*)number + i) : 0;
+				unsigned long long rval = (i * nBytes) < op.bytes ? *((unsigned int*)op.number + i) : 0; 
+
+				if (carry != 0) rval++, carry = 0;
+				if (lval < rval) lval += (unsigned long long)UINT_MAX + 1,carry++;
+
+				unsigned long long temp = lval - rval;
+				unsigned int* p = ((unsigned int*)result->number + i);
+				*p = (unsigned int)temp;
+			}
+			result->sign = sign;
+		}
+		else {
+			for (int i = 0; i < nBytes; i++) {
+
+				unsigned long long lval = (i * nBytes) < bytes ? *((unsigned int*)number + i) : 0;
+				unsigned long long rval = (i * nBytes) < op.bytes ? *((unsigned int*)op.number + i) : 0;
+
+				if (carry != 0) lval++, carry = 0;
+				if (lval > rval) rval += (unsigned long long)UINT_MAX + 1, carry++;
+
+				unsigned long long temp = rval - lval;
+				unsigned int* p = ((unsigned int*)result->number + i);
+				*p = (unsigned int)temp;
+			}
+			result->sign = !sign;
+		}
+	}
+	else {//다른 부호끼리 차 +A - -B / -A - +B
+		if (sign) {
+			bigInt rBigInt(op);
+			rBigInt.sign = !op.sign;
+			return *this + op;
+		}else {
+			bigInt rBigInt(*this);
+			rBigInt = !sign;
+			return *this + op;
 		}
 	}
 
